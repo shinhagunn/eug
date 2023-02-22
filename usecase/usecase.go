@@ -1,4 +1,4 @@
-package usecases
+package usecase
 
 import (
 	"context"
@@ -10,12 +10,12 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type Usecases[T schema.Tabler] struct {
+type Usecase[T schema.Tabler] struct {
 	Repository repository.Repository[T]
 	Omits      []string
 }
 
-type IUsecases[T schema.Tabler] interface {
+type IUsecase[T schema.Tabler] interface {
 	First(ctx context.Context, filters ...repository.Filter) (*T, error)
 	Find(ctx context.Context, filters ...repository.Filter) []*T
 	Create(ctx context.Context, model *T, fs ...repository.Filter)
@@ -23,7 +23,7 @@ type IUsecases[T schema.Tabler] interface {
 	Delete(ctx context.Context, model *T, fs ...repository.Filter)
 }
 
-func (u Usecases[T]) First(ctx context.Context, filters ...repository.Filter) (*T, error) {
+func (u Usecase[T]) First(ctx context.Context, filters ...repository.Filter) (*T, error) {
 	var value *T
 	if err := u.Repository.First(ctx, &value, filters...); errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
@@ -34,7 +34,7 @@ func (u Usecases[T]) First(ctx context.Context, filters ...repository.Filter) (*
 	return value, nil
 }
 
-func (u Usecases[T]) Find(ctx context.Context, filters ...repository.Filter) []*T {
+func (u Usecase[T]) Find(ctx context.Context, filters ...repository.Filter) []*T {
 	var values []*T
 	if err := u.Repository.Find(ctx, &values, filters...); err != nil {
 		panic(err)
@@ -43,7 +43,7 @@ func (u Usecases[T]) Find(ctx context.Context, filters ...repository.Filter) []*
 	return values
 }
 
-func (u Usecases[T]) Create(ctx context.Context, model *T, fs ...repository.Filter) {
+func (u Usecase[T]) Create(ctx context.Context, model *T, fs ...repository.Filter) {
 	fs = append(fs, filters.WithOmit(u.Omits...))
 
 	if err := u.Repository.Create(ctx, model, fs...); err != nil {
@@ -51,7 +51,7 @@ func (u Usecases[T]) Create(ctx context.Context, model *T, fs ...repository.Filt
 	}
 }
 
-func (u Usecases[T]) Updates(ctx context.Context, model *T, value interface{}, fs ...repository.Filter) {
+func (u Usecase[T]) Updates(ctx context.Context, model *T, value interface{}, fs ...repository.Filter) {
 	fs = append(fs, filters.WithOmit(u.Omits...))
 
 	if err := u.Repository.Updates(ctx, model, value, fs...); err != nil {
@@ -59,7 +59,7 @@ func (u Usecases[T]) Updates(ctx context.Context, model *T, value interface{}, f
 	}
 }
 
-func (u Usecases[T]) Delete(ctx context.Context, model *T, fs ...repository.Filter) {
+func (u Usecase[T]) Delete(ctx context.Context, model *T, fs ...repository.Filter) {
 	fs = append(fs, filters.WithOmit(u.Omits...))
 
 	if err := u.Repository.Delete(ctx, model, fs...); err != nil {
