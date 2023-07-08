@@ -20,7 +20,7 @@ type IUsecase[T schema.Tabler] interface {
 	Delete(ctx context.Context, model *T) error
 }
 
-func (u *Usecase[T]) First(ctx context.Context, filters ...Filter) (*T, error) {
+func (u Usecase[T]) First(ctx context.Context, filters ...Filter) (*T, error) {
 	model := new(T)
 
 	err := u.repo.First(ctx, model, filters...)
@@ -34,7 +34,7 @@ func (u *Usecase[T]) First(ctx context.Context, filters ...Filter) (*T, error) {
 	return model, nil
 }
 
-func (u *Usecase[T]) Find(ctx context.Context, filters ...Filter) []T {
+func (u Usecase[T]) Find(ctx context.Context, filters ...Filter) []T {
 	models := []T{}
 
 	if err := u.repo.Find(ctx, models, filters...); err != nil {
@@ -44,14 +44,14 @@ func (u *Usecase[T]) Find(ctx context.Context, filters ...Filter) []T {
 	return models
 }
 
-func (u *Usecase[T]) Create(ctx context.Context, model *T) error {
+func (u Usecase[T]) Create(ctx context.Context, model *T) error {
 	return u.repo.Create(ctx, model)
 }
 
-func (u *Usecase[T]) Updates(ctx context.Context, model *T, updates *T) error {
+func (u Usecase[T]) Updates(ctx context.Context, model *T, updates *T) error {
 	return u.repo.Updates(ctx, model, updates)
 }
 
-func (u *Usecase[T]) Delete(ctx context.Context, model *T) error {
+func (u Usecase[T]) Delete(ctx context.Context, model *T) error {
 	return u.repo.Delete(ctx, model)
 }
