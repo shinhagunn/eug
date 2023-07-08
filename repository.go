@@ -12,8 +12,8 @@ type Repository[T schema.Tabler] struct {
 	schema.Tabler
 }
 
-func NewRepository[T schema.Tabler](db *gorm.DB, entity schema.Tabler) *Repository[T] {
-	return &Repository[T]{db, entity}
+func NewRepository[T schema.Tabler](db *gorm.DB, entity schema.Tabler) Repository[T] {
+	return Repository[T]{db, entity}
 }
 
 func (r *Repository[T]) First(ctx context.Context, model *T, filters ...Filter) error {
