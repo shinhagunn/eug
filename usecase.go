@@ -9,7 +9,7 @@ import (
 )
 
 type Usecase[T schema.Tabler] struct {
-	repo Repository[T]
+	Repo Repository[T]
 }
 
 type IUsecase[T schema.Tabler] interface {
@@ -23,7 +23,7 @@ type IUsecase[T schema.Tabler] interface {
 func (u Usecase[T]) First(ctx context.Context, filters ...Filter) (*T, error) {
 	model := new(T)
 
-	err := u.repo.First(ctx, model, filters...)
+	err := u.Repo.First(ctx, model, filters...)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
@@ -37,7 +37,7 @@ func (u Usecase[T]) First(ctx context.Context, filters ...Filter) (*T, error) {
 func (u Usecase[T]) Find(ctx context.Context, filters ...Filter) []T {
 	models := []T{}
 
-	if err := u.repo.Find(ctx, models, filters...); err != nil {
+	if err := u.Repo.Find(ctx, models, filters...); err != nil {
 		return nil
 	}
 
@@ -45,13 +45,13 @@ func (u Usecase[T]) Find(ctx context.Context, filters ...Filter) []T {
 }
 
 func (u Usecase[T]) Create(ctx context.Context, model *T) error {
-	return u.repo.Create(ctx, model)
+	return u.Repo.Create(ctx, model)
 }
 
 func (u Usecase[T]) Updates(ctx context.Context, model *T, updates *T) error {
-	return u.repo.Updates(ctx, model, updates)
+	return u.Repo.Updates(ctx, model, updates)
 }
 
 func (u Usecase[T]) Delete(ctx context.Context, model *T) error {
-	return u.repo.Delete(ctx, model)
+	return u.Repo.Delete(ctx, model)
 }
