@@ -2,9 +2,7 @@ package eug
 
 import (
 	"context"
-	"errors"
 
-	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
@@ -24,9 +22,9 @@ func (u Usecase[T]) First(ctx context.Context, filters ...Filter) (*T, error) {
 	model := new(T)
 
 	err := u.Repo.First(ctx, model, filters...)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, nil
-	}
+	// if errors.Is(err, gorm.ErrRecordNotFound) {
+	// 	return nil, nil
+	// }
 	if err != nil {
 		return nil, err
 	}
